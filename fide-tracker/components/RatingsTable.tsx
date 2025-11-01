@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import FederationFlag from './FederationFlag'
 
 type Player = {
     rank: number
@@ -61,10 +62,8 @@ export default function RatingsTable() {
 
     const handleSort = (field: SortField) => {
         if (sortField === field) {
-            // Toggle order if clicking the same field
             setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
         } else {
-            // Default to desc for changes (show biggest gains first), asc for rank
             setSortField(field)
             setSortOrder(field === 'rank' ? 'asc' : 'desc')
         }
@@ -130,21 +129,21 @@ export default function RatingsTable() {
                                 <SortIcon field="rank" />
                             </div>
                         </th>
-                        <th className="px-3 py-4 text-left text-base font-bold uppercase tracking-wide w-52">
+                        <th className="px-3 py-4 text-left text-base font-bold uppercase tracking-wide w-3rem">
                             Name
                         </th>
-                        <th className="px-3 py-4 text-left text-base font-bold uppercase tracking-wide hidden sm:table-cell w-20">
-                            Fed
+                        <th className="px-3 py-4 text-center text-base font-bold uppercase tracking-wide hidden sm:table-cell w-16">
+                            Federation
                         </th>
                         <th className="px-3 py-4 text-right text-base font-bold uppercase tracking-wide w-20">
                             ELO
                         </th>
                         <th
-                            className="px-3 py-4 text-right text-base font-bold uppercase tracking-wide cursor-pointer hover:bg-gray-600 transition-colors hidden md:table-cell w-28"
+                            className="px-3 pl-8 py-4 text-right text-base font-bold uppercase tracking-wide cursor-pointer hover:bg-gray-600 transition-colors hidden md:table-cell w-28"
                             onClick={() => handleSort('monthly_change')}
                         >
                             <div className="flex items-center justify-end">
-                                Monthly
+                                MOM Change
                                 <SortIcon field="monthly_change" />
                             </div>
                         </th>
@@ -153,7 +152,7 @@ export default function RatingsTable() {
                             onClick={() => handleSort('yearly_change')}
                         >
                             <div className="flex items-center justify-end">
-                                Yearly
+                                YOY Change
                                 <SortIcon field="yearly_change" />
                             </div>
                         </th>
@@ -163,8 +162,7 @@ export default function RatingsTable() {
                     {sortedPlayers.map((player, index) => (
                         <tr
                             key={player.fide_id}
-                            className={`hover:bg-blue-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
-                                }`}
+                            className={`hover:bg-blue-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}
                         >
                             <td className="px-3 py-3 whitespace-nowrap text-base font-bold text-gray-900 w-16">
                                 {player.rank}
@@ -174,21 +172,23 @@ export default function RatingsTable() {
                                     {player.name}
                                 </div>
                             </td>
-                            <td className="px-3 py-3 whitespace-nowrap text-base text-gray-600 font-medium hidden sm:table-cell w-20">
-                                {player.federation}
+                            <td className="px-3 py-3 whitespace-nowrap hidden sm:table-cell w-16">
+                                <div className="flex justify-center">
+                                    <FederationFlag fideCode={player.federation} className="w-8 h-6 rounded shadow-sm" />
+                                </div>
                             </td>
                             <td className="px-3 py-3 whitespace-nowrap text-base text-right font-bold text-gray-900 w-20">
                                 {player.rating}
                             </td>
                             <td
-                                className={`px-3 py-3 whitespace-nowrap text-base text-right font-medium hidden md:table-cell w-28 ${getChangeColor(
+                                className={`px-3 py-3 whitespace-nowrap text-base text-center font-medium hidden md:table-cell w-28 ${getChangeColor(
                                     player.monthly_change
                                 )}`}
                             >
                                 {formatChange(player.monthly_change)}
                             </td>
                             <td
-                                className={`px-3 py-3 whitespace-nowrap text-base text-right font-medium hidden lg:table-cell w-28 ${getChangeColor(
+                                className={`px-3 py-3 whitespace-nowrap text-base text-center font-medium hidden lg:table-cell w-28 ${getChangeColor(
                                     player.yearly_change
                                 )}`}
                             >
