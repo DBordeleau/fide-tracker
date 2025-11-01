@@ -1,0 +1,5 @@
+This is a full stack web app I'm building that scrapes the FIDE top 100 open rankings and saves a historical snapshot monthly (shortly after FIDE updates their rankings).
+
+I am building this project to familiarize myself with web scraping tech and practices. The rating scraper is a python script that extracts relevant information from the HTML table @ https://ratings.fide.com/top_lists.phtml?list=open using Selenium.
+
+I seeded a PostgreSQL database with a year of historical data so there would be something to actually track as soon as I launch. download_historical_data.py downloads FIDE rating data from October 2024-October 2025 (I started scraping the ratings table Nov 1, 2025) and unzips the text files. Then I parsed relevant information from these text files (name, federation, rating, birth year) and uploaded it to the database using seed_historical_data.py. Players are only added to the database if their rating exceeds the minimum threshold (2500) or if they already existed in the database. This way if a player was 2500 but then dropped below, we will still track their rating changes.

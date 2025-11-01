@@ -1,0 +1,60 @@
+name: Scrape FIDE Rankings
+
+on:
+  schedule:
+    # Run at 02:00 UTC on the 1st of every month (after FIDE updates)
+    - cron: '0 2 1 * *'
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget gnupg
+          wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+      
+      - name: Install ChromeDriver
+        run: |
+          CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d'.' -f1)
+          wget -q "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION}" -O /tmp/chromedriver_version
+          CHROMEDRIVER_VERSION=$(cat /tmp/chromedriver_version)
+          wget -q "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip"
+          unzip chromedriver_linux64.zip
+          sudo mv chromedriver /usr/local/bin/
+          sudo chmod +x /usr/local/bin/chromedriver
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r scraper/requirements.txt
+      
+      - name: Run scraper and upload to Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: | # Run the scraper and then the upload script
+          cd scraper
+          python scraper.py
+          python upload_data.py
+
+      - name: Upload artifacts (optional backup)
+        uses: actions/upload-artifact@v3
+        with:
+          name: fide-rankings
+          path: scraper/data/rankings_*.json
+          retention-days: 90

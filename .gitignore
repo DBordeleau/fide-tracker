@@ -1,0 +1,65 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+
+# Environment variables
+.env
+.env.local
+.env*.local
+scraper/.env
+
+# Data files
+scraper/data/
+historical_data/*.zip
+historical_data/*.txt
+
+# Node.js dependencies
+fide-tracker/node_modules/
+fide-tracker/.pnp
+fide-tracker/.pnp.*
+fide-tracker/.yarn/*
+!fide-tracker/.yarn/patches
+!fide-tracker/.yarn/plugins
+!fide-tracker/.yarn/releases
+!fide-tracker/.yarn/versions
+
+# Next.js
+fide-tracker/.next/
+fide-tracker/out/
+
+# Production
+fide-tracker/build/
+
+# Misc
+.DS_Store
+*.pem
+*.log
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Vercel
+fide-tracker/.vercel
+
+# TypeScript
+fide-tracker/*.tsbuildinfo
+fide-tracker/next-env.d.ts
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
