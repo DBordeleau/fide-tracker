@@ -1,0 +1,33 @@
+name: Update ratings from text file
+
+on:
+  schedule:
+    # Run at 03:00 UTC on the 1st of every month (1 hour after web scraper)
+    - cron: '0 3 1 * *'
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  update-rankings:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r scraper/requirements.txt
+      
+      - name: Download and process current month's data
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: |
+          cd scraper
+          python update_ratings_for_current_month.py
