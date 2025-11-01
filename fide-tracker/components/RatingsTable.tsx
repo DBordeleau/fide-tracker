@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import FederationFlag from './FederationFlag'
 
@@ -250,9 +251,13 @@ export default function RatingsTable({ onDateLoaded }: RatingsTableProps) {
                                         {player.rank}
                                     </td>
                                     <td className="px-3 py-3 text-base font-medium text-gray-900 w-52">
-                                        <div className="truncate" title={player.name}>
+                                        <Link
+                                            href={`/player/${player.fide_id}`}
+                                            className="truncate block text-blue-600 hover:text-blue-800 hover:underline transition-colors"
+                                            title={player.name}
+                                        >
                                             {player.name}
-                                        </div>
+                                        </Link>
                                     </td>
                                     <td className="px-3 py-3 whitespace-nowrap hidden sm:table-cell w-16">
                                         <div className="flex justify-center">
