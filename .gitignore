@@ -22,6 +22,7 @@ scraper/.env
 scraper/data/
 historical_data/*.zip
 historical_data/*.txt
+schema.sql
 
 # Node.js dependencies
 fide-tracker/node_modules/
