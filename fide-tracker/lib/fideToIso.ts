@@ -194,6 +194,7 @@ export function fideToIso(fideCode: string): string | null {
         'SUR': 'SR',
         'GUY': 'GY',
         'BIZ': 'BZ',
+        'ENG': 'GB',
     }
 
     return mapping[fideCode] || null
