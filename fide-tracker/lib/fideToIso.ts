@@ -28,7 +28,7 @@ export function fideToIso(fideCode: string): string | null {
         'EGY': 'EG',
         'TUR': 'TR',
         'ISR': 'IL',
-        'IRN': 'IR',
+        'IRI': 'IR',
         'KOR': 'KR',
         'VIE': 'VN',
         'THA': 'TH',
